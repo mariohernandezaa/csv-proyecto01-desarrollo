@@ -8,12 +8,20 @@ El análisis se calcula en Python. El archivo y sus filas no se envían al model
 
 ## Documento de diseño
 
-La [plantilla de documentación en Jupyter](notebooks/plantilla_documentacion.ipynb) presenta la idea del proyecto y organiza los apartados que se desarrollarán poco a poco: objetivos, requisitos, diseño, implementación, pruebas y despliegue. Por ahora, solo la introducción está redactada; el resto son encabezados para completar durante el trabajo.
+La [documentación de diseño en Jupyter](notebooks/plantilla_documentacion.ipynb) está redactada por completo. Incluye:
+
+- Descripción del proyecto, objetivos de aprendizaje y stack tecnológico.
+- Estructura del proyecto y requisitos funcionales (RF-01 a RF-08) y no funcionales (RNF-01 a RNF-08).
+- Cinco diagramas UML en Mermaid: casos de uso, clases, actividad, secuencia y transición de estados.
+- Plan de ejecución por fases, con el progreso de cada una.
+- Solución técnica, casos de prueba, guía de ejecución y variables de entorno.
+
+El diseño está escrito, pero la implementación no: solo la Fase 1 está hecha (ver más abajo).
 
 
 ## Alcance previsto
 
-La primera versión de la aplicación se centrará en cargar un CSV, mostrar un informe básico y presentar sugerencias explicativas. No limpiará los datos automáticamente, no entrenará modelos y no generará gráficos. El tamaño máximo de archivo y otros límites se definirán durante el diseño técnico.
+La primera versión de la aplicación se centrará en cargar un CSV, mostrar un informe básico y presentar sugerencias explicativas. No limpiará los datos automáticamente, no entrenará modelos y no generará gráficos. Los límites son propuestas del diseño técnico y pueden cambiar: tamaño máximo de 5 MB, análisis de hasta 5 segundos para ese tamaño y tiempo de espera fijo para la IA.
 
 ## Progreso: Fase 1 — entorno y maqueta visual
 

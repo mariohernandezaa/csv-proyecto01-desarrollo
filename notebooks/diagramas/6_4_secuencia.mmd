@@ -1,0 +1,24 @@
+sequenceDiagram
+    actor U as Estudiante
+    participant V as Interfaz Vue
+    participant F as Backend FastAPI
+    participant P as Analizador pandas
+    participant O as OpenRouter
+    U->>V: Selecciona un CSV
+    V->>F: POST /api/analizar (multipart)
+    F->>P: analizar(contenido)
+    P-->>F: InformeCsv
+    F-->>V: 200 InformeCsv
+    V-->>U: Muestra el informe
+    U->>V: Pide sugerencias
+    V->>F: POST /api/sugerencias (InformeCsv)
+    F->>O: Solicitud con el resumen (sin filas)
+    alt Respuesta válida
+        O-->>F: JSON con sugerencias
+        F-->>V: 200 Sugerencias
+        V-->>U: Muestra sugerencias orientativas
+    else Error, timeout o formato no válido
+        O-->>F: Error
+        F-->>V: 503 IA no disponible
+        V-->>U: Mantiene el informe y muestra aviso
+    end

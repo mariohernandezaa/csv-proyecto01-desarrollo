@@ -1,0 +1,15 @@
+flowchart LR
+    E(["Estudiante"])
+    subgraph CPP["CSV Preanalisis de Prueba"]
+        UC1(["Cargar archivo CSV"])
+        UC2(["Ver informe básico"])
+        UC3(["Ver tipos y vacíos"])
+        UC4(["Pedir sugerencias de IA"])
+        UC5(["Ver aviso de error"])
+    end
+    E --> UC1
+    E --> UC4
+    UC1 -->|incluye| UC2
+    UC2 -->|incluye| UC3
+    UC4 -->|extiende| UC2
+    UC1 -.->|si falla| UC5

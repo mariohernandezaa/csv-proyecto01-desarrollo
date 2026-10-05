@@ -1,0 +1,55 @@
+classDiagram
+    direction LR
+    class CsvDropzone {
+        +File archivo
+        +emitirArchivo()
+    }
+    class SummaryPanel {
+        +InformeCsv informe
+    }
+    class SuggestionsPanel {
+        +Sugerencias sugerencias
+    }
+    class AnalizadorCsv {
+        +analizar(contenido: bytes) InformeCsv
+        +resumir(informe: InformeCsv) ResumenEstadistico
+    }
+    class ClienteIA {
+        +sugerir(resumen: ResumenEstadistico) Sugerencias
+    }
+    class InformeCsv {
+        +int filas
+        +int columnas
+        +str separador
+        +dict distribucionVaciosPorFila
+    }
+    class ColumnaInfo {
+        +str nombre
+        +str tipo
+        +int vacios
+        +float porcentajeVacios
+    }
+    class ResumenEstadistico {
+        +int filas
+        +int columnas
+        +List~ColumnaInfo~ detalle
+    }
+    class Sugerencias {
+        +List~str~ preguntasAnalisis
+        +List~TratamientoVacios~ tratamientos
+        +str aviso
+    }
+    class TratamientoVacios {
+        +str columna
+        +List~str~ opciones
+    }
+    CsvDropzone ..> AnalizadorCsv : envía archivo
+    SummaryPanel --> InformeCsv
+    SuggestionsPanel --> Sugerencias
+    AnalizadorCsv ..> InformeCsv : crea
+    AnalizadorCsv ..> ResumenEstadistico : crea
+    InformeCsv "1" *-- "0..*" ColumnaInfo : contiene
+    ResumenEstadistico "1" *-- "0..*" ColumnaInfo : contiene
+    ClienteIA ..> ResumenEstadistico : recibe
+    ClienteIA ..> Sugerencias : devuelve
+    Sugerencias "1" *-- "0..*" TratamientoVacios : contiene

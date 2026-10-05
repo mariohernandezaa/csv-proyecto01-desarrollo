@@ -1,0 +1,19 @@
+flowchart TD
+    A([Inicio]) --> B[Seleccionar archivo CSV]
+    B --> C{¿Es .csv y no supera 5 MB?}
+    C -- No --> E[Mostrar error de validación]
+    C -- Sí --> D[Enviar archivo al backend]
+    D --> F{¿Se puede leer con pandas?}
+    F -- No --> E
+    F -- Sí --> G[Calcular informe en Python]
+    G --> H[Mostrar informe]
+    H --> I{¿Pedir sugerencias de IA?}
+    I -- No --> Z([Fin])
+    I -- Sí --> J[Crear resumen estadístico]
+    J --> K[Enviar resumen a OpenRouter]
+    K --> L{¿Respuesta válida?}
+    L -- Sí --> M[Mostrar sugerencias orientativas]
+    L -- No --> N[Mostrar aviso de IA no disponible]
+    M --> Z
+    N --> Z
+    E --> Z
