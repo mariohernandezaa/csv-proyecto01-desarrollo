@@ -1,5 +1,44 @@
 <script setup>
-// Fase 1: Sin lógica de carga de archivo todavía
+import { ref } from 'vue'
+
+const emit = defineEmits(['analysis-start', 'analysis-success', 'analysis-error'])
+const fileInput = ref(null)
+const isLoading = ref(false)
+
+function openFilePicker() {
+  fileInput.value?.click()
+}
+
+async function handleFileChange(event) {
+  const archivo = event.target.files?.[0]
+  if (!archivo) return
+
+  isLoading.value = true
+  emit('analysis-start')
+
+  try {
+    const formData = new FormData()
+    formData.append('file', archivo)
+
+    const response = await fetch('/api/analyze', {
+      method: 'POST',
+      body: formData,
+    })
+    const informe = await response.json()
+
+    if (!response.ok) {
+      throw new Error(informe.detail || 'No se pudo analizar el archivo')
+    }
+
+    emit('analysis-success', informe)
+    
+  } catch (error) {
+    emit('analysis-error', error instanceof Error ? error.message : 'No se pudo analizar el archivo')
+  } finally {
+    isLoading.value = false
+    event.target.value = ''
+  }
+}
 </script>
 
 <template>
@@ -18,7 +57,17 @@
         <p class="widget-hint">o selecciona un archivo desde tu equipo</p>
       </div>
 
-      <button type="button" class="btn widget-button">Elegir archivo</button>
+      <input
+        ref="fileInput"
+        class="file-input"
+        type="file"
+        accept=".csv,text/csv"
+        @change="handleFileChange"
+      />
+      <button type="button" class="btn widget-button" :disabled="isLoading" @click="openFilePicker">
+        {{ isLoading ? 'Analizando...' : 'Elegir archivo' }}
+      </button>
+      
     </div>
   </section>
 </template>
@@ -87,6 +136,20 @@
 
 .widget-button:hover {
   background: var(--accent-text);
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-message {
+  margin: 0;
+  color: var(--text-h);
+  font-size: 14px;
+}
+
+.upload-error {
+  color: #ff8b8b;
 }
 
 @media (max-width: 640px) {
