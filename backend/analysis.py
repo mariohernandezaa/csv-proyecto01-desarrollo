@@ -17,7 +17,7 @@ def analizar_csv(archivo):
     except UnicodeDecodeError:
         archivo.seek(0)
         datos = pd.read_csv(archivo, sep=separador, encoding="latin-1")
-
+        
     return {
         "filas": len(datos),
         "columnas": len(datos.columns),
