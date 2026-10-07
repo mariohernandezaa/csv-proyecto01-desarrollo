@@ -3,23 +3,15 @@
 
 <template>
   <header class="hero">
-    <div class="topbar">
-      <span class="brand">CPP<span class="brand-dot">.</span></span>
-      <p class="brand-lede">Por Mario y Alex!</p>
+    <div class="hero-content">
+      <h1 class="title">
+        CSV <span class="accent-word">Preanálisis</span> de Pruebas
+      </h1>
+      <p class="lede">Explora y entiende tus datos antes de analizarlos.</p>
     </div>
 
-    <div class="hero-inner">
-      <div class="hero-content">
-        <h1 class="title">
-          CSV <span class="accent-word">Preanálisis</span> de Pruebas
-        </h1>
-        <p class="lede">Explora y entiende tus datos antes de analizarlos.</p>
-      </div>
-
-      <div class="hero-media">
-        <div class="hero-glow" aria-hidden="true"></div>
-        <img src="/img/heropng.png" alt="" class="hero-img" />
-      </div>
+    <div class="hero-media">
+      <img src="/img/heropng.png" alt="" class="hero-img" />
     </div>
   </header>
 </template>
@@ -28,50 +20,40 @@
 .hero {
   width: 100%;
   background: linear-gradient(160deg, var(--hero-bg-start) 0%, var(--hero-bg-end) 100%);
-  padding-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  height: 100%;
+  padding: 44px 40px 0;
+  border-radius: var(--radius-lg);
   overflow: hidden;
+  box-shadow: var(--shadow-edge);
+  animation: hero-in 0.7s var(--ease) backwards;
 }
 
-.topbar {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 28px 24px 0;
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
 }
 
-.brand {
-  font-family: var(--font-display);
-  font-size: 22px;
-  letter-spacing: 0.02em;
-  color: var(--text-h);
-}
-
-.brand-dot {
-  color: var(--accent);
-}
-
-.hero-inner {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 44px 24px 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  align-items: center;
-  gap: 24px;
+@media (prefers-reduced-motion: reduce) {
+  .hero {
+    animation: none;
+  }
 }
 
 .hero-content {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  position: relative;
-  z-index: 2;
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: 800;
   line-height: 1.14;
-  letter-spacing: -0.01em;
   color: var(--text-h);
 }
 
@@ -89,51 +71,40 @@
 }
 
 .hero-media {
-  position: relative;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  min-height: 260px;
-}
-
-.hero-glow {
-  position: absolute;
-  width: 50vw;
-  height: 50vh;
-  border-radius: 50%;
-  bottom: 0;
+  margin-top: auto;
 }
 
 .hero-img {
-  position: relative;
   width: 100%;
-  max-width: 300px;
+  max-width: 320px;
   height: auto;
-  filter: drop-shadow(0 24px 24px rgba(22, 20, 20, 0.18));
+  filter: drop-shadow(0 24px 24px rgba(15, 23, 42, 0.16));
 }
 
 @media (min-width: 860px) {
-  .hero-inner {
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 40px;
-    padding-top: 60px;
-  }
-
   .title {
     font-size: 3.4rem;
   }
 
-  .hero-media {
-    min-height: 400px;
-  }
-
-  .hero-glow {
-    width: 340px;
-    height: 340px;
+  .hero {
+    padding: 56px 48px 0;
   }
 
   .hero-img {
     max-width: 380px;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero {
+    padding: 32px 24px 0;
+  }
+
+  .title {
+    font-size: 2rem;
   }
 }
 </style>

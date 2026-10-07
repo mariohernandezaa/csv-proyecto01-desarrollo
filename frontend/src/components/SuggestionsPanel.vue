@@ -10,119 +10,118 @@ const emit = defineEmits(['generate-suggestions'])
 </script>
 
 <template>
-  <article class="result-card surface-card">
-    <div class="icon-badge result-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9.09 9a3 3 0 1 1 5.82 1c0 2-3 3-3 3" />
-        <line x1="12" y1="17" x2="12.01" y2="17" />
-        <circle cx="12" cy="12" r="10" />
-      </svg>
-    </div>
-    <p class="eyebrow">Sugerencias</p>
-    <h2 class="result-title">Sugerencias orientativas</h2>
+  <article class="panel suggestions-panel">
+    <header class="panel-header">
+      <span class="panel-tag">Sugerencias</span>
+      <h2 class="panel-title">Sugerencias orientativas</h2>
+      <p class="panel-subtitle">Preguntas de análisis y criterios para valores ausentes</p>
+    </header>
 
-    <p v-if="props.loading" class="result-text" role="status">
-      Generando preguntas de análisis y recomendaciones...
-    </p>
+    <div class="panel-body">
+      <p v-if="!props.canGenerate" class="panel-text">
+        Carga un archivo CSV para generar preguntas de análisis y recomendaciones para tratar los valores ausentes.
+      </p>
 
-    <p v-else-if="props.errorMessage" class="result-text upload-error" role="alert">
-      {{ props.errorMessage }}
-    </p>
+      <p v-if="props.loading" class="panel-status" role="status">
+        Generando preguntas de análisis y recomendaciones...
+      </p>
 
-    <template v-else-if="props.suggestions">
-      <section class="suggestion-section">
-        <h3>Preguntas de análisis</h3>
-        <ul>
-          <li v-for="pregunta in props.suggestions.preguntas_analisis" :key="pregunta">
-            {{ pregunta }}
-          </li>
-        </ul>
-      </section>
+      <p v-else-if="props.errorMessage" class="panel-text upload-error" role="alert">
+        {{ props.errorMessage }}
+      </p>
 
-      <section class="suggestion-section">
-        <h3>Tratamientos de valores ausentes</h3>
-        <div
-          v-for="tratamiento in props.suggestions.tratamientos"
-          :key="tratamiento.columna"
-          class="treatment"
-        >
-          <strong>{{ tratamiento.columna }}</strong>
+      <template v-else-if="props.suggestions">
+        <section class="suggestion-section">
+          <h3>Preguntas de análisis</h3>
           <ul>
-            <li v-for="opcion in tratamiento.opciones" :key="opcion">
-              {{ opcion }}
+            <li v-for="pregunta in props.suggestions.preguntas_analisis" :key="pregunta">
+              {{ pregunta }}
             </li>
           </ul>
-        </div>
-      </section>
+        </section>
 
-      <p class="result-text disclaimer">{{ props.suggestions.aviso }}</p>
-    </template>
+        <section class="suggestion-section">
+          <h3>Tratamientos de valores ausentes</h3>
+          <div
+            v-for="tratamiento in props.suggestions.tratamientos"
+            :key="tratamiento.columna"
+            class="treatment"
+          >
+            <strong>{{ tratamiento.columna }}</strong>
+            <ul>
+              <li v-for="opcion in tratamiento.opciones" :key="opcion">
+                {{ opcion }}
+              </li>
+            </ul>
+          </div>
+        </section>
 
-    <button
-      v-if="props.canGenerate && !props.suggestions"
-      class="generate-button"
-      type="button"
-      :disabled="props.loading"
-      @click="emit('generate-suggestions')"
-    >
-      {{ props.loading ? 'Generando sugerencias…' : 'Generar sugerencias' }}
-    </button>
+        <p class="panel-text disclaimer">{{ props.suggestions.aviso }}</p>
+      </template>
 
-    <p v-else-if="!props.canGenerate" class="result-text">
-      Cuando se cargue un archivo, aquí aparecerán preguntas de análisis sugeridas
-      y recomendaciones para tratar los valores ausentes.
-    </p>
+      <button
+        v-if="props.canGenerate && !props.suggestions"
+        class="generate-button"
+        type="button"
+        :disabled="props.loading"
+        @click="emit('generate-suggestions')"
+      >
+        {{ props.loading ? 'Generando sugerencias…' : 'Generar sugerencias' }}
+      </button>
+    </div>
   </article>
 </template>
 
 <style scoped>
-.result-card {
-  position: relative;
+.panel {
   overflow: hidden;
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  border-color: var(--border-hover);
-  background:
-    linear-gradient(145deg, var(--surface) 0%, var(--bg-subtle) 100%);
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
 }
 
-.result-card::after {
-  content: '';
-  position: absolute;
-  width: 160px;
-  height: 160px;
-  right: -74px;
-  top: -82px;
-  border-radius: 50%;
-  background: var(--accent-bg);
-  pointer-events: none;
+.panel-header {
+  display: grid;
+  gap: 6px;
+  padding: 28px 32px 24px;
+  background: color-mix(in srgb, var(--text-h) 3%, transparent);
+  border-bottom: 1px solid var(--border);
 }
 
-.result-icon {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 2px;
-  background: var(--accent-bg);
-  border-color: var(--accent-border);
-  color: var(--accent-text);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-}
-
-.result-title {
-  font-size: 1.25rem;
+.panel-tag {
+  font-size: 11px;
   font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.panel-title {
+  margin-top: 4px;
+  font-size: 2rem;
+  line-height: 1.15;
   color: var(--text-h);
 }
 
-.result-text {
-  font-size: 14.5px;
-  line-height: 1.65;
-  color: var(--muted);
+.panel-subtitle {
+  font-size: 15px;
+  color: var(--text-main);
 }
 
-.result-text[role='status'] {
+.panel-body {
+  display: grid;
+  gap: 22px;
+  padding: 28px 32px 32px;
+}
+
+.panel-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-main);
+}
+
+.panel-status {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -133,7 +132,7 @@ const emit = defineEmits(['generate-suggestions'])
   color: var(--accent-text);
 }
 
-.result-text[role='status']::before {
+.panel-status::before {
   content: '';
   width: 8px;
   height: 8px;
@@ -146,10 +145,10 @@ const emit = defineEmits(['generate-suggestions'])
 
 .upload-error {
   padding: 12px 14px;
-  border: 1px solid rgba(255, 113, 113, 0.34);
+  border: 1px solid color-mix(in srgb, var(--danger) 28%, transparent);
   border-radius: var(--radius-md);
-  background: rgba(255, 113, 113, 0.08);
-  color: #c63c3c;
+  background: color-mix(in srgb, var(--danger) 8%, transparent);
+  color: var(--danger);
 }
 
 .suggestion-section {
@@ -203,13 +202,12 @@ const emit = defineEmits(['generate-suggestions'])
   margin-top: 4px;
   padding: 14px 20px;
   border: 1px solid var(--accent);
-  border-radius: 999px;
+  border-radius: var(--radius-md);
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-on);
   font: inherit;
   font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.01em;
   cursor: pointer;
   box-shadow: 0 10px 24px -12px var(--accent-text);
   transition: transform 0.2s var(--ease), background-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
@@ -248,13 +246,14 @@ const emit = defineEmits(['generate-suggestions'])
 }
 
 @media (max-width: 640px) {
-  .result-card {
-    padding: 26px 22px;
+  .panel-header,
+  .panel-body {
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
-  .result-icon {
-    width: 44px;
-    height: 44px;
+  .panel-title {
+    font-size: 1.65rem;
   }
 }
 </style>
