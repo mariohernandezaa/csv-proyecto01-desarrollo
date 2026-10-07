@@ -74,9 +74,7 @@ async function handleFileChange(event) {
 
 <style scoped>
 .widget-wrap {
-  max-width: 1120px;
-  margin: -64px auto 0;
-  padding: 0 24px;
+  width: 100%;
   position: relative;
   z-index: 5;
 }
@@ -88,23 +86,22 @@ async function handleFileChange(event) {
   text-align: center;
   gap: 18px;
   padding: 64px 40px;
-  border-radius: 0;
-  border: 1.5px dashed var(--accent-border);
-  background: rgba(41, 41, 41, 0.494);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  box-shadow: var(--shadow-lift);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border-hover);
+  background: var(--surface);
+  box-shadow: var(--shadow-edge);
   cursor: pointer;
   transition: border-color 0.2s var(--ease), background-color 0.2s var(--ease);
 }
 
 .widget:hover {
-  background: rgba(51, 50, 50, 0.85);
+  border-color: var(--accent-border);
+  background: var(--bg-subtle);
 }
 
 .widget-icon {
   width: 60px;
   height: 60px;
-  border-radius: 0;
 }
 
 .widget-text {
@@ -126,12 +123,12 @@ async function handleFileChange(event) {
 
 .widget-button {
   margin-top: 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-md);
   background: var(--accent);
-  color: #ffffff;
+  color: var(--accent-on);
   padding: 14px 34px;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .widget-button:hover {
@@ -149,14 +146,10 @@ async function handleFileChange(event) {
 }
 
 .upload-error {
-  color: #ff8b8b;
+  color: var(--danger);
 }
 
 @media (max-width: 640px) {
-  .widget-wrap {
-    margin-top: -44px;
-  }
-
   .widget {
     padding: 48px 24px;
   }

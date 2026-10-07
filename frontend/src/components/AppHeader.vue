@@ -3,68 +3,50 @@
 
 <template>
   <header class="hero">
-    <div class="topbar">
-      <span class="brand">CPP<span class="brand-dot">.</span></span>
-      <p class="brand-lede">Por Mario y Alex!</p>
+    <div class="hero-content">
+      <h1 class="title">
+        CSV <span class="accent-word">Preanálisis</span> de Pruebas
+      </h1>
+      <p class="lede">Explora y entiende tus datos antes de analizarlos.</p>
     </div>
 
-    <div class="hero-inner">
-      <div class="hero-content">
-        <h1 class="title">
-          CSV <span class="accent-word">Preanálisis</span> de Pruebas
-        </h1>
-        <p class="lede">Explora y entiende tus datos antes de analizarlos.</p>
-      </div>
-
-      <div class="hero-media">
-        <div class="hero-glow" aria-hidden="true"></div>
-        <img src="/img/heropng.png" alt="" class="hero-img" />
-      </div>
+    <div class="hero-media">
+      <img src="/img/heropng.png" alt="" class="hero-img" />
     </div>
   </header>
 </template>
 
 <style scoped>
 .hero {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  height: 100%;
+  padding: 44px 40px 0;
+  border-radius: var(--radius-lg);
   background: linear-gradient(160deg, var(--hero-bg-start) 0%, var(--hero-bg-end) 100%);
-  padding-bottom: 80px;
+  box-shadow: var(--shadow-edge);
   overflow: hidden;
+  animation: hero-in 0.7s var(--ease) backwards;
 }
 
-.topbar {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 28px 24px 0;
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
 }
 
-.brand {
-  font-family: var(--font-display);
-  font-size: 22px;
-  letter-spacing: 0.02em;
-  color: var(--text-h);
-}
-
-.brand-dot {
-  color: var(--accent);
-}
-
-.hero-inner {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 44px 24px 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  align-items: center;
-  gap: 24px;
+@media (prefers-reduced-motion: reduce) {
+  .hero {
+    animation: none;
+  }
 }
 
 .hero-content {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  position: relative;
-  z-index: 2;
 }
 
 .title {
@@ -78,7 +60,7 @@
 .accent-word {
   font-family: var(--font-display);
   font-weight: 400;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .lede {
@@ -89,47 +71,25 @@
 }
 
 .hero-media {
-  position: relative;
+  margin-top: auto;
   display: flex;
-  align-items: flex-end;
   justify-content: center;
-  min-height: 260px;
-}
-
-.hero-glow {
-  position: absolute;
-  width: 50vw;
-  height: 50vh;
-  border-radius: 50%;
-  bottom: 0;
 }
 
 .hero-img {
-  position: relative;
   width: 100%;
-  max-width: 300px;
+  max-width: 320px;
   height: auto;
-  filter: drop-shadow(0 24px 24px rgba(22, 20, 20, 0.18));
+  filter: drop-shadow(0 24px 24px rgba(15, 23, 42, 0.16));
 }
 
 @media (min-width: 860px) {
-  .hero-inner {
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 40px;
-    padding-top: 60px;
-  }
-
   .title {
     font-size: 3.4rem;
   }
 
-  .hero-media {
-    min-height: 400px;
-  }
-
-  .hero-glow {
-    width: 340px;
-    height: 340px;
+  .hero {
+    padding: 56px 48px 0;
   }
 
   .hero-img {

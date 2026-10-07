@@ -1,46 +1,75 @@
 <script setup></script>
 
 <template>
-  <article class="result-card surface-card">
-    <div class="icon-badge result-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9.09 9a3 3 0 1 1 5.82 1c0 2-3 3-3 3" />
-        <line x1="12" y1="17" x2="12.01" y2="17" />
-        <circle cx="12" cy="12" r="10" />
-      </svg>
+  <article class="panel">
+    <header class="panel-header">
+      <span class="panel-tag">Sugerencias</span>
+      <h2 class="panel-title">Sugerencias orientativas</h2>
+      <p class="panel-subtitle">Preguntas de análisis y criterios para valores ausentes</p>
+    </header>
+
+    <div class="panel-body">
+      <p class="panel-text">
+        Cuando se cargue un archivo, aquí aparecerán preguntas de análisis sugeridas
+        y recomendaciones para tratar los valores ausentes.
+      </p>
     </div>
-    <p class="eyebrow">Sugerencias</p>
-    <h2 class="result-title">Sugerencias orientativas</h2>
-    <p class="result-text">
-      Cuando se cargue un archivo, aquí aparecerán preguntas de análisis sugeridas
-      y recomendaciones para tratar los valores ausentes.
-    </p>
   </article>
 </template>
 
 <style scoped>
-.result-card {
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
 }
 
-.result-icon {
-  width: 44px;
-  height: 44px;
-  margin-bottom: 6px;
+.panel-header {
+  display: grid;
+  gap: 6px;
+  padding: 28px 32px 24px;
+  background: color-mix(in srgb, var(--text-h) 3%, transparent);
+  border-bottom: 1px solid var(--border);
 }
 
-.result-title {
-  font-size: 1.2rem;
+.panel-tag {
+  font-size: 11px;
   font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.panel-title {
+  margin-top: 4px;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   color: var(--text-h);
 }
 
-.result-text {
-  font-size: 14.5px;
-  line-height: 1.65;
-  color: var(--muted);
+.panel-subtitle {
+  font-size: 15px;
+  color: var(--text-main);
+}
+
+.panel-body {
+  padding: 28px 32px 32px;
+}
+
+.panel-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-main);
+}
+
+@media (max-width: 520px) {
+  .panel-header,
+  .panel-body {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
 </style>

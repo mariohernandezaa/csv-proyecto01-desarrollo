@@ -15,158 +15,238 @@ const filasConAusentes = computed(() =>
 </script>
 
 <template>
-  <article class="result-card surface-card">
-    <div class="icon-badge result-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 3v16a2 2 0 0 0 2 2h16" />
-        <path d="M7 16l4-6 4 4 5-8" />
-      </svg>
+  <article class="panel">
+    <header class="panel-header">
+      <span class="panel-tag">Informe</span>
+      <h2 class="panel-title">Informe básico</h2>
+      <p class="panel-subtitle">Resumen estructural del archivo cargado</p>
+    </header>
+
+    <div class="panel-body">
+      <p v-if="props.errorMessage" class="panel-text upload-error" role="alert">
+        {{ props.errorMessage }}
+      </p>
+      <template v-else-if="props.informe">
+        <p class="panel-status" role="status">{{ props.resultMessage }}</p>
+
+        <dl class="kpis">
+          <div class="kpi">
+            <dt>Filas</dt>
+            <dd>{{ props.informe.filas }}</dd>
+          </div>
+          <div class="kpi">
+            <dt>Columnas</dt>
+            <dd>{{ props.informe.columnas }}</dd>
+          </div>
+        </dl>
+
+        <div class="detail-grid">
+          <section class="detail-section">
+            <h3>Tipos de datos</h3>
+            <dl class="detail-list">
+              <div v-for="(tipo, columna) in props.informe.tipos" :key="columna">
+                <dt>{{ columna }}</dt>
+                <dd>{{ tipo }}</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="detail-section">
+            <h3>Valores ausentes por columna</h3>
+            <dl class="detail-list">
+              <div v-for="(cantidad, columna) in props.informe.ausentes_por_columna" :key="columna">
+                <dt>{{ columna }}</dt>
+                <dd>{{ cantidad }}</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section v-if="filasConAusentes.length" class="detail-section">
+            <h3>Filas con valores ausentes</h3>
+            <ul class="detail-list detail-list--scroll">
+              <li v-for="fila in filasConAusentes" :key="fila.fila">
+                <span>Fila {{ fila.fila }}</span>
+                <span>{{ fila.cantidad }} ausente(s)</span>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </template>
+      <p v-else class="panel-text" id="upload-instructions">
+        Sube un archivo CSV para ver aquí filas, columnas, tipos de datos y valores ausentes.
+      </p>
     </div>
-    <p class="eyebrow">Informe</p>
-    <h2 class="result-title">Informe básico</h2>
-
-    <p v-if="props.errorMessage" class="result-text upload-error" role="alert">
-      {{ props.errorMessage }}
-    </p>
-    <template v-else-if="props.informe">
-      <p class="result-text" role="status">{{ props.resultMessage }}</p>
-
-      <dl class="summary-stats">
-        <div class="summary-stat">
-          <dt>Filas</dt>
-          <dd>{{ props.informe.filas }}</dd>
-        </div>
-        <div class="summary-stat">
-          <dt>Columnas</dt>
-          <dd>{{ props.informe.columnas }}</dd>
-        </div>
-      </dl>
-
-      <section class="detail-section">
-        <h3>Tipos de datos</h3>
-        <dl class="detail-list">
-          <div v-for="(tipo, columna) in props.informe.tipos" :key="columna">
-            <dt>{{ columna }}</dt>
-            <dd>{{ tipo }}</dd>
-          </div>
-        </dl>
-      </section>
-
-      <section class="detail-section">
-        <h3>Valores ausentes por columna</h3>
-        <dl class="detail-list">
-          <div v-for="(cantidad, columna) in props.informe.ausentes_por_columna" :key="columna">
-            <dt>{{ columna }}</dt>
-            <dd>{{ cantidad }}</dd>
-          </div>
-        </dl>
-      </section>
-
-      <section v-if="filasConAusentes.length" class="detail-section">
-        <h3>Filas con valores ausentes</h3>
-        <ul class="missing-rows">
-          <li v-for="fila in filasConAusentes" :key="fila.fila">
-            Fila {{ fila.fila }}: {{ fila.cantidad }} ausente(s)
-          </li>
-        </ul>
-      </section>
-    </template>
-    <p v-else class="result-text" id="upload-instructions">
-      Sube un archivo CSV para ver aquí filas, columnas, tipos de datos y valores ausentes.
-    </p>
   </article>
 </template>
 
 <style scoped>
-.result-card {
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
 }
 
-.result-icon {
-  width: 44px;
-  height: 44px;
-  margin-bottom: 6px;
+.panel-header {
+  display: grid;
+  gap: 6px;
+  padding: 28px 32px 24px;
+  background: color-mix(in srgb, var(--text-h) 3%, transparent);
+  border-bottom: 1px solid var(--border);
 }
 
-.result-title {
-  font-size: 1.2rem;
+.panel-tag {
+  font-size: 11px;
   font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.panel-title {
+  margin-top: 4px;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   color: var(--text-h);
 }
 
-.result-text {
-  font-size: 14.5px;
-  line-height: 1.65;
-  color: var(--muted);
+.panel-subtitle {
+  font-size: 15px;
+  color: var(--text-main);
+}
+
+.panel-body {
+  display: grid;
+  gap: 28px;
+  padding: 28px 32px 32px;
+}
+
+.panel-status {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.panel-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-main);
 }
 
 .upload-error {
-  color: #ff8b8b;
+  color: var(--danger);
+  font-weight: 600;
 }
 
-.summary-stats {
+.kpis {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin: 4px 0;
-}
-
-.summary-stat,
-.detail-list > div {
-  display: flex;
-  justify-content: space-between;
   gap: 16px;
-}
-
-.summary-stat {
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.summary-stat dt,
-.detail-list dt {
-  color: var(--muted);
-}
-
-.summary-stat dd,
-.detail-list dd {
   margin: 0;
-  color: var(--text-h);
+}
+
+.kpi {
+  padding: 22px 24px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--text-h) 4%, transparent);
+  border: 1px solid var(--border);
+}
+
+.kpi dt {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.kpi dd {
+  margin: 6px 0 0;
+  font-size: 2.75rem;
   font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text-h);
+  font-variant-numeric: tabular-nums;
+}
+
+.detail-grid {
+  display: grid;
+  gap: 28px;
+}
+
+@media (min-width: 760px) {
+  .detail-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .detail-section {
   display: grid;
-  gap: 8px;
-  margin-top: 8px;
+  gap: 10px;
+  align-content: start;
 }
 
 .detail-section h3 {
-  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
   color: var(--text-h);
-  font-size: 14px;
 }
 
-.detail-list,
-.missing-rows {
+.detail-list {
   display: grid;
-  gap: 6px;
   margin: 0;
   padding: 0;
   list-style: none;
+  font-size: 15px;
+  border-top: 1px solid var(--border-hover);
 }
 
-.detail-list > div {
-  font-size: 13px;
+.detail-list > div,
+.detail-list > li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
 }
 
-.missing-rows {
-  max-height: 140px;
+.detail-list dt {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--text-main);
+}
+
+.detail-list dd {
+  margin: 0;
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--text-h);
+  font-variant-numeric: tabular-nums;
+}
+
+.detail-list li span:last-child {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--text-h);
+  font-variant-numeric: tabular-nums;
+}
+
+.detail-list--scroll {
+  max-height: 220px;
   overflow-y: auto;
-  color: var(--muted);
-  font-size: 13px;
+}
+
+@media (max-width: 520px) {
+  .panel-header,
+  .panel-body {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .kpi dd {
+    font-size: 2.25rem;
+  }
 }
 </style>

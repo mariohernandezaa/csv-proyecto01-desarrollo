@@ -7,31 +7,35 @@
 }
 
 :root {
-  /* --- PALETA (rosa/coral, estilo editorial de moda) --- */
+  /* --- PALETA (blanco base, negro para texto y bloques, rojo como acento) --- */
   --bg-app: #ffffff;
   --bg: var(--bg-app);
   --bg-surface: #ffffff;
   --surface: var(--bg-surface);
-  --bg-subtle: #fdf1ee;
+  --bg-subtle: #f5f5f5;
 
-  --text-main: #4a4541;
+  --text-main: #2b2b2b;
   --text: var(--text-main);
-  --text-h: #161414;
-  --text-muted: #8b8480;
+  --text-h: #0a0a0a;
+  --text-muted: #6b6b6b;
   --muted: var(--text-muted);
 
-  --border: #f0e4df;
-  --border-hover: #e3d2ca;
+  --border: #e8e8e8;
+  --border-hover: #cfcfcf;
 
-  /* Acento coral */
-  --accent: #f1664f;
-  --accent-text: #d1482f;
-  --accent-bg: rgba(241, 102, 79, 0.08);
-  --accent-border: rgba(241, 102, 79, 0.28);
+  /* Rojo de acento, usado con moderación */
+  --accent: #e63b2e;
+  --accent-text: #c42b1f;
+  --accent-on: #ffffff;
+  --accent-bg: rgba(230, 59, 46, 0.08);
+  --accent-border: rgba(230, 59, 46, 0.3);
 
-  /* Fondo del hero */
-  --hero-bg-start: #ffe4dc;
-  --hero-bg-end: #f7bdae;
+  /* Error (no es el acento: se reserva para avisos) */
+  --danger: #b42318;
+
+  /* Fondo del hero: gris muy claro, como los paneles de la referencia */
+  --hero-bg-start: #f6f6f6;
+  --hero-bg-end: #ebebeb;
 
   /* Tipografía */
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, sans-serif;
@@ -44,9 +48,10 @@
   --radius-lg: 16px;
   --radius-xl: 24px;
 
-  --shadow-sm: 0 1px 2px 0 rgba(22, 20, 20, 0.04);
-  --shadow-card: 0 1px 3px 0 rgba(22, 20, 20, 0.05), 0 1px 2px -1px rgba(22, 20, 20, 0.05);
-  --shadow-lift: 0 24px 48px -20px rgba(22, 20, 20, 0.25);
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-card: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05);
+  --shadow-lift: 0 24px 48px -20px rgba(15, 23, 42, 0.25);
+  --shadow-edge: 0 0 0 1px var(--border-hover), 0 24px 44px -22px rgba(15, 23, 42, 0.36);
 
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -55,40 +60,21 @@
   line-height: 1.55;
   color: var(--text);
   background-color: var(--bg);
-  color-scheme: light dark;
+  color-scheme: light;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-app: #1b1613;
-    --bg: var(--bg-app);
-    --bg-surface: #241d19;
-    --surface: var(--bg-surface);
-    --bg-subtle: #2c2319;
+/* Transición entre vistas: la tarjeta se expande y se contrae */
+::view-transition-group(card-preanalisis),
+::view-transition-group(card-ia) {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-    --text-main: #ece3db;
-    --text: var(--text-main);
-    --text-h: #faf4ed;
-    --text-muted: #a89a8c;
-    --muted: var(--text-muted);
-
-    --border: #382c25;
-    --border-hover: #4a3b31;
-
-    --accent: #f1846c;
-    --accent-text: #f4a08b;
-    --accent-bg: rgba(241, 132, 108, 0.12);
-    --accent-border: rgba(241, 132, 108, 0.3);
-
-    --hero-bg-start: #3a251f;
-    --hero-bg-end: #552f26;
-
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-    --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.35);
-    --shadow-lift: 0 24px 48px -20px rgba(0, 0, 0, 0.6);
-  }
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.4s;
 }
 
 /* Reset global */
@@ -175,7 +161,7 @@ code {
   gap: 6px;
   border: none;
   background: var(--text-h);
-  color: #ffffff;
+  color: var(--bg-app);
   border-radius: var(--radius-md);
   padding: 13px 26px;
   font-size: 14px;
