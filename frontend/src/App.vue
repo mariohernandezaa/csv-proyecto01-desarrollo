@@ -8,16 +8,55 @@ import SuggestionsPanel from './components/SuggestionsPanel.vue'
 const informe = ref(null)
 const resultMessage = ref('')
 const errorMessage = ref('')
+const suggestions = ref(null)
+const suggestionsLoading = ref(false)
+const suggestionsError = ref('')
 
 function handleAnalysisStart() {
   informe.value = null
   resultMessage.value = ''
   errorMessage.value = ''
+  suggestions.value = null
+  suggestionsLoading.value = false
+  suggestionsError.value = ''
 }
 
 function handleAnalysisSuccess(resultado) {
   informe.value = resultado
   resultMessage.value = `Análisis completado: ${resultado.filas} filas y ${resultado.columnas} columnas.`
+}
+
+async function requestSuggestions() {
+  if (!informe.value) return
+
+  suggestions.value = null
+  suggestionsLoading.value = true
+  suggestionsError.value = ''
+
+  try {
+    const response = await fetch('/api/sugerencias', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ informe: informe.value }),
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(data.detail || 'No se pudieron generar las sugerencias')
+    }
+
+    suggestions.value = data
+  } catch (error) {
+    suggestionsError.value =
+      error instanceof Error
+        ? error.message
+        : 'No se pudieron generar las sugerencias'
+  } finally {
+    suggestionsLoading.value = false
+  }
 }
 
 function handleAnalysisError(mensaje) {
@@ -42,7 +81,13 @@ function handleAnalysisError(mensaje) {
           :result-message="resultMessage"
           :error-message="errorMessage"
         />
-        <SuggestionsPanel />
+        <SuggestionsPanel
+          :suggestions="suggestions"
+          :loading="suggestionsLoading"
+          :error-message="suggestionsError"
+          :can-generate="Boolean(informe)"
+          @generate-suggestions="requestSuggestions"
+        />
       </div>
     </section>
   </div>
