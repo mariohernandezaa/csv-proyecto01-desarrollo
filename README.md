@@ -57,3 +57,34 @@ Y abrir `http://localhost:5173` en el navegador.
 3. Pintar los datos reales en `SummaryPanel.vue` en lugar de los placeholders.
 4. Integrar el modelo de IA para las sugerencias de `SuggestionsPanel.vue`.
 5. Valorar si merece la pena pasar el frontend a TypeScript antes de que crezca mucho.
+
+## Ejecución con Docker (backend + frontend juntos)
+
+Todo el proyecto (API de FastAPI y la interfaz de Vue ya compilada y servida con Nginx) se levanta con un único comando usando Docker Compose. Nginx sirve los ficheros estáticos del frontend y reenvía las peticiones a `/api` al contenedor del backend, así que no hace falta configurar CORS ni URLs distintas entre ambos.
+
+**Requisitos:** Docker y Docker Compose instalados.
+
+**Configurar la clave de OpenRouter (opcional, solo para sugerencias de IA reales):**
+```bash
+cp .env.example .env
+# Editar .env y rellenar OPENROUTER_API_KEY
+```
+Si no se configura, la aplicación funciona igual: el informe del CSV se calcula siempre, y `/api/sugerencias` devuelve un error controlado (503) en lugar de sugerencias de IA.
+
+**Arrancar todo:**
+```bash
+docker compose up --build
+```
+- Frontend: http://localhost:8080
+- Backend (API): http://localhost:8000 (documentación interactiva en `/docs`)
+
+**Parar todo:**
+```bash
+docker compose down
+```
+(o `Ctrl+C` si se dejó `docker compose up` en primer plano; ambos contenedores se detienen juntos).
+
+**Reconstruir imágenes tras cambiar dependencias:**
+```bash
+docker compose up --build
+```
